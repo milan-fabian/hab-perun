@@ -9,3 +9,5 @@ build
 captures
 .externalNativeBuild
 /android-app/gradle/wrapper
+/server/perun-model/target/
+/server/perun-server/target/
