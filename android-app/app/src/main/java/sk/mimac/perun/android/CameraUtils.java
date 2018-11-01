@@ -6,9 +6,13 @@ import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import sk.mimac.perun.android.service.ServiceConnector;
@@ -16,26 +20,31 @@ import sk.mimac.perun.android.service.ServiceConnector;
 public class CameraUtils {
 
     private static final String TAG = CameraUtils.class.getSimpleName();
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
-    public static void getPicture() {
+    public static void getPicture(boolean highres) {
         Log.i(TAG, "Opening camera");
-        Camera camera = Camera.open();
-        if (camera == null) {
-            Log.w(TAG, "No camera found");
-            return;
-        }
         try {
-            prepareCamera(camera);
+            Camera camera = Camera.open();
+            if (camera == null) {
+                Log.w(TAG, "No camera found");
+                return;
+            }
+            prepareCamera(camera, highres);
             Log.i(TAG, "Taking picture from camera");
             camera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
                     try {
                         Log.i(TAG, "Picture taken, size=" + data.length);
-                        try (OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/image" + System.currentTimeMillis() + ".jpg")) {
+                        File dir = new File(Environment.getExternalStorageDirectory(), "hab-perun/images");
+                        dir.mkdirs();
+                        try (OutputStream stream = new FileOutputStream(new File(dir, DATE_FORMAT.format(new Date()) + ".jpg"))) {
                             stream.write(data);
                         }
-                        new Thread(() -> ServiceConnector.sendImage(data)).start();
+                        if(!highres) {
+                            new Thread(() -> ServiceConnector.sendImage("phone", data)).start();
+                        }
                     } catch (Exception ex) {
                         Log.w(TAG, "Can't get image from camera", ex);
                     } finally {
@@ -48,7 +57,7 @@ public class CameraUtils {
         }
     }
 
-    private static void prepareCamera(Camera camera) throws IOException {
+    private static void prepareCamera(Camera camera, boolean highres) throws IOException {
         if (Looper.myLooper() == null) {
             Looper.prepare();
         }
@@ -56,8 +65,11 @@ public class CameraUtils {
         camera.startPreview();
 
         Camera.Parameters params = camera.getParameters();
-        Camera.Size size = getMaxSize(params.getSupportedPictureSizes());
-        params.setPictureSize(size.width, size.height);
+        if (highres) {
+            Camera.Size size = getMaxSize(params.getSupportedPictureSizes());
+            params.setPictureSize(size.width, size.height);
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        }
         camera.setParameters(params);
     }
 
