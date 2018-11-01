@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>hab-perun</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/leaflet.js"></script>
+        <script src="/js/utils.js"></script>
+        <script src="/js/script.js"></script>
+        <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+        <link rel="stylesheet" href="/css/leaflet.css" type="text/css"/>
+    </head>
+    <body>
+        <div>
+            <table id="sensor-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Last value</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div id="map"></div>
+        <div id="direction"></div>
+        <div id="footer-status">
+            Last data from server received at <span id="last-time">[never]</span>, current time is <span id="current-time"></span>
+        </div>
+    </body>
+</html>

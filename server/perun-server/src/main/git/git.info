@@ -1,0 +1,14 @@
+# Code info
+git.commit.id=${git.commit.id}
+git.commit.time=${git.commit.time}
+git.branch=${git.branch}
+gir.dirty=${git.dirty}
+
+# Build info
+git.build.user.name=${git.build.user.name}
+git.build.host=${git.build.host}
+git.build.time=${git.build.time}
+git.build.version=${git.build.version}
+
+# Maven info
+project.version=${project.version}
