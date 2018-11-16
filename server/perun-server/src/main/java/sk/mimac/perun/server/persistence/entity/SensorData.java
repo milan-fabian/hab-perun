@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -24,14 +21,13 @@ public class SensorData implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "timestamp")
+    @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "sensor_id", nullable = false)
-    private Sensor sensor;
+    @Column(name = "sensor_id", nullable = false)
+    private long sensorId;
 
-    @Column(name = "value")
+    @Column(name = "value", nullable = false)
     private float value;
 
     public Long getId() {
@@ -50,12 +46,12 @@ public class SensorData implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Sensor getSensor() {
-        return sensor;
+    public long getSensorId() {
+        return sensorId;
     }
 
-    public void setSensor(Sensor sensor) {
-        this.sensor = sensor;
+    public void setSensorId(long sensorId) {
+        this.sensorId = sensorId;
     }
 
     public float getValue() {

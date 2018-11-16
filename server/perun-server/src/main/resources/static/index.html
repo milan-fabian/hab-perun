@@ -6,10 +6,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/js/jquery.min.js"></script>
         <script src="/js/leaflet.js"></script>
+        <script src="/js/Chart.bundle.min.js"></script>
         <script src="/js/utils.js"></script>
         <script src="/js/script.js"></script>
         <link rel="stylesheet" href="/css/style.css" type="text/css"/>
         <link rel="stylesheet" href="/css/leaflet.css" type="text/css"/>
+        <script>
+            $(function () {
+                createSensorTable();
+                setInterval(loadLastData, 10000);
+                setupMap();
+                setInterval(function () {
+                    $("#current-time").html(new Date().toLocaleTimeString());
+                }, 500);
+                navigator.geolocation.watchPosition(showUserPosition);
+            });
+        </script>
     </head>
     <body>
         <div>
@@ -20,6 +32,7 @@
                         <th>Name</th>
                         <th>Last value</th>
                         <th>Timestamp</th>
+                        <th>Graph</th>
                     </tr>
                 </thead>
                 <tbody>

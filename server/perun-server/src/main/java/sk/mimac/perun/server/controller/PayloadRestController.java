@@ -26,9 +26,9 @@ import sk.mimac.perun.server.persistence.repository.SensorRepository;
  * @author Mimac
  */
 @RestController
-public class StatusRestController {
+public class PayloadRestController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(StatusRestController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PayloadRestController.class);
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
 
     @Autowired
@@ -40,7 +40,7 @@ public class StatusRestController {
     @Value("${perun.image.store}")
     private String imageStorePath;
 
-    @PostMapping("/status")
+    @PostMapping("/payload/status")
     public void postStatus(@RequestBody PayloadStatus payloadStatus) {
         LOG.debug("Received payload status");
         LocalDateTime dateTime = Instant.ofEpochMilli(payloadStatus.getTimestamp()).atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -53,14 +53,14 @@ public class StatusRestController {
                 sensor = sensorRepository.save(sensor);
             }
             SensorData entity = new SensorData();
-            entity.setSensor(sensor);
+            entity.setSensorId(sensor.getId());
             entity.setValue(sensorStatus.getValue());
             entity.setTimestamp(dateTime);
             sensorDataRepository.save(entity);
         }
     }
 
-    @PostMapping("/image")
+    @PostMapping("/payload/image")
     public void postImage(@RequestParam String camera, @RequestBody byte[] data) {
         LOG.debug("Received image");
         try {

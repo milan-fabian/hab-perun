@@ -17,6 +17,7 @@ function getUnitForType(type) {
         case "ACC_Z":
             return "m/s²";
         case "BAT_LVL":
+        case "PHONE_SIGNAL":
             return "%";
         case "BAT_TEMP":
             return "°C";
@@ -57,6 +58,8 @@ function getDescriptionForType(type) {
             return "Battery temperature";
         case "SPEED":
             return "Speed";
+        case "PHONE_SIGNAL":
+            return "Phone signal";
         default:
             return "";
     }

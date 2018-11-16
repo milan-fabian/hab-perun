@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import sk.mimac.perun.model.SensorType;
 
@@ -13,7 +14,10 @@ import sk.mimac.perun.model.SensorType;
  * @author Mimac
  */
 @Entity
-@Table(name = "sensor")
+@Table(name = "sensor",
+        indexes = {
+            @Index(columnList = "type, name", name = "sensor_type_name")}
+)
 public class Sensor implements Serializable {
 
     @Id
@@ -21,10 +25,10 @@ public class Sensor implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private SensorType type;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     public Long getId() {
@@ -34,7 +38,6 @@ public class Sensor implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public SensorType getType() {
         return type;

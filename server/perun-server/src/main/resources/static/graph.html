@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>hab-perun</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/leaflet.js"></script>
+        <script src="/js/Chart.bundle.min.js"></script>
+        <script src="/js/utils.js"></script>
+        <script src="/js/script.js"></script>
+        <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+        <link rel="stylesheet" href="/css/leaflet.css" type="text/css"/>
+        <script>
+            $(function () {
+                loadSensorsToCheckboxes();
+                createBigGraph();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="checkboxes"></div>
+        <canvas id='graph'></canvas>
+    </body>
+</html>
