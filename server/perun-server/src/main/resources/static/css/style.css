@@ -13,10 +13,3 @@
     height: 600px;
 }
 
-/* footer */
-#footer-status {
-    height: 25px; 
-    position: fixed; 
-    bottom: 0%;
-    width: 100%;
-}

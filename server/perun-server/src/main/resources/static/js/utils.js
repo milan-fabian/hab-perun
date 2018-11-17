@@ -71,6 +71,17 @@ function formatDateTime(value) {
     return "<span style='color:" + (late ? "red" : "black") + "'>" + date.toLocaleTimeString() + "</span>";
 }
 
+function dateToString(d) {
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 function calculateDistance(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
     var dLat = deg2rad(lat2 - lat1);  // deg2rad below

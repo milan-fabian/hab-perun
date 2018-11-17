@@ -32,7 +32,7 @@ function loadLastData() {
                     y: element.value
                 });
 
-                if (data.length > 20) {
+                if (data.length > 25) {
                     data.shift();
                 }
                 chart.update();
@@ -103,7 +103,7 @@ function addSensorToTable(sensor) {
                 callbacks: {
                     label: function (tooltipItem, data) {
                         var date = new Date(tooltipItem.xLabel);
-                        return date.toTimeString().split(' ')[0] + ": " + tooltipItem.yLabel + " " + getUnitForType(sensor.type);
+                        return date.toTimeString().split(' ')[0] + ": " + +tooltipItem.yLabel.toFixed(3) + " " + getUnitForType(sensor.type);
                     }
                 }
             },
@@ -142,7 +142,7 @@ function refreshDistance() {
 function createBigGraph() {
     var canvas = document.getElementById("graph");
     canvas.width = window.innerWidth - 10;
-    canvas.height = window.innerHeight - 40;
+    canvas.height = window.innerHeight - 50;
     var ctx = canvas.getContext('2d');
     graph = new Chart(ctx, {
         type: 'scatter',
@@ -157,8 +157,7 @@ function createBigGraph() {
                 callbacks: {
                     label: function (tooltipItem, data) {
                         var sensor = data.datasets[tooltipItem.datasetIndex].sensor;
-                        var date = new Date(tooltipItem.xLabel);
-                        return date.toTimeString().split(' ')[0] + ": " + tooltipItem.yLabel + " " + getUnitForType(sensor.type);
+                        return tooltipItem.xLabel + ": " + +tooltipItem.yLabel.toFixed(3) + " " + getUnitForType(sensor.type);
                     }
                 }
             },
@@ -178,8 +177,9 @@ function createBigGraph() {
 }
 
 function toggleBigGraphData(sensorId, checked) {
+    var date = dateToString(new Date());
     if (checked) {
-        $.get("/sensor/history?from=2018-11-15&to=2018-12-01&sensorId=" + sensorId, function (data) {
+        $.get("/sensor/history?from=" + date + "&to=" + date + "&sensorId=" + sensorId, function (data) {
             var elements = data.map(x => {
                 return {x: Date.parse(x.timestamp), y: x.value};
             });
@@ -198,7 +198,6 @@ function toggleBigGraphData(sensorId, checked) {
         datasets = datasets.filter(x => x.sensor.id !== sensorId);
         graph.data.datasets = datasets;
         graph.update();
-
     }
 }
 
