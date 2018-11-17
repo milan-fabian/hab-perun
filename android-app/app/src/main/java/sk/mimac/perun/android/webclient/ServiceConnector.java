@@ -1,4 +1,4 @@
-package sk.mimac.perun.android.service;
+package sk.mimac.perun.android.webclient;
 
 import android.util.Log;
 
@@ -15,6 +15,7 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Collections;
 import java.util.List;
 
 import sk.mimac.perun.model.PayloadStatus;
@@ -27,7 +28,7 @@ public class ServiceConnector {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private static String credentials;
-    private static List<String> urls;
+    private static List<String> urls = Collections.emptyList();
 
     public static void setCredentials(String credentials) {
         ServiceConnector.credentials = credentials;
@@ -40,7 +41,7 @@ public class ServiceConnector {
     public static void sendSensorData(PayloadStatus payloadStatus) {
         for (String url : urls) {
             try {
-                HttpPost post = new HttpPost(url + "/status");
+                HttpPost post = new HttpPost(url + "/payload/status");
                 String data = OBJECT_MAPPER.writeValueAsString(payloadStatus);
                 StringEntity requestEntity = new StringEntity(data, ContentType.APPLICATION_JSON);
                 post.setEntity(requestEntity);
@@ -56,7 +57,7 @@ public class ServiceConnector {
     public static void sendImage(String camera, byte[] imageData) {
         for (String url : urls) {
             try {
-                HttpPost post = new HttpPost(url + "/image?camera=" + camera);
+                HttpPost post = new HttpPost(url + "/payload/image?camera=" + camera);
                 ByteArrayEntity requestEntity = new ByteArrayEntity(imageData);
                 post.setEntity(requestEntity);
                 execute(HttpClientBuilderHolder.build(), post);

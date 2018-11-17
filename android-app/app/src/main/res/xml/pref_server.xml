@@ -1,0 +1,27 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:inputType="textMultiLine"
+        android:key="server_url"
+        android:maxLines="5"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="Server URLs (each on one line)" />
+
+    <EditTextPreference
+        android:inputType="text"
+        android:key="server_username"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Server username" />
+
+    <EditTextPreference
+        android:inputType="textVisiblePassword"
+        android:key="server_password"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Server password" />
+
+</PreferenceScreen>

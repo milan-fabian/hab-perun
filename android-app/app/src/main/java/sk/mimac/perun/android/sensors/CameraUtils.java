@@ -1,4 +1,4 @@
-package sk.mimac.perun.android;
+package sk.mimac.perun.android.sensors;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import sk.mimac.perun.android.service.ServiceConnector;
+import sk.mimac.perun.android.webclient.ServiceConnector;
 
 public class CameraUtils {
 

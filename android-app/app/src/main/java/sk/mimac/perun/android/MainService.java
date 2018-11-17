@@ -4,23 +4,25 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Timer;
 
-import sk.mimac.perun.android.service.ServiceConnector;
+import sk.mimac.perun.android.sensors.FetchDataTimerTask;
+import sk.mimac.perun.android.webclient.ServiceConnector;
 
 public class MainService extends Service {
 
     private static final String TAG = "MainService";
-    private static final int TIMER_DELAY = 25_000;
 
-    private LocationManager locationManager;
     private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
     private WifiManager.WifiLock wifiLock;
@@ -31,23 +33,20 @@ public class MainService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Starting service");
 
-        ServiceConnector.setUrls(Arrays.asList("http://192.168.0.30:8080"));
-        ServiceConnector.setCredentials("dGVzdDp0ZXN0");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        initializeServiceConnector(prefs);
 
         powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "hab-perun:service");
         wakeLock.acquire();
 
-        LocationListener locationListener = new LocationListener();
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
 
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "hab-perun:service");
         wifiLock.acquire();
 
         timer = new Timer();
-        timer.schedule(new FetchDataTimerTask(this, locationListener), 1000, TIMER_DELAY);
+        timer.schedule(new FetchDataTimerTask(this), 1000, Integer.parseInt(prefs.getString("fetch_data_interval", "25")) * 1000);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -68,5 +67,13 @@ public class MainService extends Service {
         timer.cancel();
     }
 
-
+    private void initializeServiceConnector(SharedPreferences prefs) {
+        String username = prefs.getString("server_username", null);
+        String password = prefs.getString("server_password", null);
+        String url = prefs.getString("server_url", null);
+        if (url != null && username != null && password != null) {
+            ServiceConnector.setUrls(Arrays.asList(url.split("\\n")));
+            ServiceConnector.setCredentials(Base64.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP));
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package sk.mimac.perun.android.service;
+package sk.mimac.perun.android.webclient;
 
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.config.RequestConfig;

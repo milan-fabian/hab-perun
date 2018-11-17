@@ -1,4 +1,4 @@
-package sk.mimac.perun.android;
+package sk.mimac.perun.android.sensors;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

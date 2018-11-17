@@ -1,4 +1,4 @@
-package sk.mimac.perun.android;
+package sk.mimac.perun.android.sensors;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,7 +7,10 @@ import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.BatteryManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimerTask;
 
-import sk.mimac.perun.android.service.ServiceConnector;
+import sk.mimac.perun.android.webclient.ServiceConnector;
 import sk.mimac.perun.model.PayloadStatus;
 import sk.mimac.perun.model.SensorType;
 
@@ -26,14 +29,22 @@ public class FetchDataTimerTask extends TimerTask {
     private final Context context;
     private final SensorManager sensorManager;
     private final LocationListener locationListener;
+    private final PhoneSignalListener phoneSignalListener;
 
     private int counter = 0;
 
     @SuppressLint("MissingPermission")
-    public FetchDataTimerTask(Context context, LocationListener locationListener) {
+    public FetchDataTimerTask(Context context) {
         this.context = context;
-        this.locationListener = locationListener;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
+        locationListener = new LocationListener();
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
+
+        phoneSignalListener = new PhoneSignalListener();
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(phoneSignalListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     }
 
     @Override
@@ -72,7 +83,9 @@ public class FetchDataTimerTask extends TimerTask {
         status.getSensors().add(new PayloadStatus.SensorStatus(SensorType.BAT_LVL, "phone_bat", batteryLevel));
         status.getSensors().add(new PayloadStatus.SensorStatus(SensorType.BAT_TEMP, "phone_bat", batteryTemperature));
         addLocationData(status.getSensors());
+        addSignalStrengthData(status.getSensors());
         status.getSensors().addAll(sensorListener.getStatuses());
+        Log.d(TAG, "A3 " + status.getSensors());
         ServiceConnector.sendSensorData(status);
         Log.d(TAG, "Tick done");
     }
@@ -90,6 +103,13 @@ public class FetchDataTimerTask extends TimerTask {
         int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
         Log.d(TAG, "Battery level: " + level + "%");
         return level;
+    }
+
+    private void addSignalStrengthData(List<PayloadStatus.SensorStatus> sensors) {
+        Integer signalStrength = phoneSignalListener.getLastStrength();
+        if (signalStrength != null) {
+            sensors.add(new PayloadStatus.SensorStatus(SensorType.PHONE_SIGNAL, "phone_gsm", signalStrength));
+        }
     }
 
     private void addLocationData(List<PayloadStatus.SensorStatus> sensors) {
