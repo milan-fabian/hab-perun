@@ -1,0 +1,12 @@
+[Unit]
+Description=HAB Perun tracker
+
+[Service]
+ExecStart=/home/pi/pits/tracker/tracker-run.sh
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+Alias=hab-perun.service
+
