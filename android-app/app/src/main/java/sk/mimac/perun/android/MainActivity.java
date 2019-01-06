@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import sk.mimac.perun.android.sensors.SensorListener;
 
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
-        startService(new Intent(this, MainService.class));
     }
 
     @Override
@@ -56,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onButtonStartService(View view) {
+        startService(new Intent(this, MainService.class));
+    }
+
+    public void onButtonStopService(View view) {
+        stopService(new Intent(this, MainService.class));
     }
 
 }

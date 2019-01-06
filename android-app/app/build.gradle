@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+    implementation 'commons-io:commons-io:2.6'
     implementation 'sk.mimac.perun:perun-model:0.1-SNAPSHOT'
     implementation group: 'cz.msebera.android' , name: 'httpclient' , version: '4.4.1.2'
     testImplementation 'junit:junit:4.12'

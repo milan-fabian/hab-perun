@@ -27,6 +27,7 @@ public class MainService extends Service {
     private PowerManager.WakeLock wakeLock;
     private WifiManager.WifiLock wifiLock;
     private Timer timer;
+    private FetchDataTimerTask fetchDataTimerTask;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -45,8 +46,9 @@ public class MainService extends Service {
         wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "hab-perun:service");
         wifiLock.acquire();
 
+        fetchDataTimerTask = new FetchDataTimerTask(this);
         timer = new Timer();
-        timer.schedule(new FetchDataTimerTask(this), 1000, Integer.parseInt(prefs.getString("fetch_data_interval", "25")) * 1000);
+        timer.schedule(fetchDataTimerTask, 1000, Integer.parseInt(prefs.getString("fetch_data_interval", "25")) * 1000);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -59,6 +61,7 @@ public class MainService extends Service {
     public void onDestroy() {
         Log.i(TAG, "Stopping service");
         timer.cancel();
+        fetchDataTimerTask.stop();
         wakeLock.release();
         wifiLock.release();
         super.onDestroy();

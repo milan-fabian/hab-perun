@@ -68,8 +68,13 @@ public class CameraUtils {
         if (highres) {
             Camera.Size size = getMaxSize(params.getSupportedPictureSizes());
             params.setPictureSize(size.width, size.height);
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        } else {
+            params.setJpegQuality(85);
         }
+        Log.i(TAG, "Params: " + params.flatten());
+        params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY);
+        params.setExposureCompensation(1);
         camera.setParameters(params);
     }
 

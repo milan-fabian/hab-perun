@@ -33,7 +33,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
 
-        <service android:name=".MainService" />
+        <service android:name=".MainService" android:exported="true"/>
 
         <receiver
             android:name=".RestartServiceBroadcastReceiver">
