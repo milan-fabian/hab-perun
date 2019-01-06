@@ -13,12 +13,14 @@
         <link rel="stylesheet" href="/css/leaflet.css" type="text/css"/>
         <script>
             $(function () {
+                document.getElementById("date").valueAsDate = new Date();
                 loadSensorsToCheckboxes();
                 createBigGraph();
             });
         </script>
     </head>
     <body>
+        <label for='date'>Date: </label><input id='date' type="date" onchange="graphDateChanged();"/>
         <div id="checkboxes"></div>
         <canvas id='graph'></canvas>
     </body>

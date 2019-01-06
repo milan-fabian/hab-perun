@@ -1,6 +1,7 @@
 function getUnitForType(type) {
     switch (type) {
         case "ALT":
+        case "POS_ACCURACY":
             return "m";
         case "LONG":
         case "LAT":
@@ -60,24 +61,31 @@ function getDescriptionForType(type) {
             return "Speed";
         case "PHONE_SIGNAL":
             return "Phone signal";
+        case "POS_ACCURACY":
+            return "Position accuracy";
         default:
-            return "";
+            return type;
     }
 }
 
 function formatDateTime(value) {
     var date = new Date(Date.parse(value));
-    var late = ((new Date() - date) > 60 * 1000);
+    if (isNaN(date)) {
+        date = new Date(value);
+    }
+    var late = ((new Date() - date) > 90 * 1000);
     return "<span style='color:" + (late ? "red" : "black") + "'>" + date.toLocaleTimeString() + "</span>";
 }
 
 function dateToString(d) {
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+    month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
 
     return [year, month, day].join('-');
 }
@@ -86,11 +94,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
     var dLat = deg2rad(lat2 - lat1);  // deg2rad below
     var dLon = deg2rad(lon2 - lon1);
-    var a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2)
-            ;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c; // Distance in km
     return d;

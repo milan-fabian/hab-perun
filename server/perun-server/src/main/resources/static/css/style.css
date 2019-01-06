@@ -1,8 +1,9 @@
 /* sensor-table */
-#sensor-table {
+#sensor-table, #images-table {
     border-collapse: collapse;
+    margin: 5px 0;
 }
-#sensor-table th, #sensor-table td {
+#sensor-table th, #sensor-table td, #images-table th, #images-table td {
     border: 1px solid black;
     padding: 3px 5px;
 }

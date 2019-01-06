@@ -6,21 +6,39 @@ var sensors = {};
 var graph;
 
 function loadLastData() {
+    loadLastDataSensors();
+    loadLastDataImages();
+}
+
+function loadLastDataImages() {
+    $.get("/image/statistics", function (data) {
+        $("#images-table tbody").empty();
+        data.forEach(function (element) {
+            $("#images-table tbody").append("<tr><td>" + element.name + "</td><td>" + element.count
+                    + "</td><td><a href='/image/file/" + element.mostRecentFileName + "' target='_blank'>" + formatDateTime(element.mostRecentTimestamp)
+                    + "</a> (" + Math.round(element.mostRecentSize / 1024) + " KB)</td></tr>");
+        });
+    });
+}
+
+function loadLastDataSensors() {
     $.get("/data/last", function (data) {
         var lat, long, alt;
         data.forEach(function (element) {
             $("#sensor-" + element.sensorId + "-value").html(+element.value.toFixed(3));
             $("#sensor-" + element.sensorId + "-timestamp").html(formatDateTime(element.timestamp));
-            switch (sensors[element.sensorId].type) {
-                case "LAT":
-                    lat = element.value;
-                    break;
-                case "LONG":
-                    long = element.value;
-                    break;
-                case "ALT":
-                    alt = element.value;
-                    break;
+            if (sensors[element.sensorId].name === "phone_gps") {
+                switch (sensors[element.sensorId].type) {
+                    case "LAT":
+                        lat = element.value;
+                        break;
+                    case "LONG":
+                        long = element.value;
+                        break;
+                    case "ALT":
+                        alt = element.value;
+                        break;
+                }
             }
 
             var chart = sensors[element.sensorId].chart;
@@ -39,24 +57,28 @@ function loadLastData() {
             }
         });
         $("#last-time").html(new Date().toLocaleTimeString());
-        if (lat && long && alt) {
-            if (!mapViewSet) {
-                map.setView([lat, long], 16);
-                mapViewSet = true;
-            }
-            if (payloadMarker) {
-                payloadMarker.setLatLng(new L.LatLng(lat, long));
-            } else {
-                payloadMarker = L.circle([lat, long], {
-                    color: '#0a0',
-                    fillColor: '#3a3',
-                    weight: 6
-                }).addTo(map);
-            }
-            payloadPosition = [lat, long, alt];
-            refreshDistance();
-        }
+        updateMap(lat, long, alt);
     });
+}
+
+function updateMap(lat, long, alt) {
+    if (lat && long && alt) {
+        if (!mapViewSet) {
+            map.setView([lat, long], 16);
+            mapViewSet = true;
+        }
+        if (payloadMarker) {
+            payloadMarker.setLatLng(new L.LatLng(lat, long));
+        } else {
+            payloadMarker = L.circle([lat, long], {
+                color: '#0a0',
+                fillColor: '#3a3',
+                weight: 6
+            }).addTo(map);
+        }
+        payloadPosition = [lat, long, alt];
+        refreshDistance();
+    }
 }
 
 function showUserPosition(position) {
@@ -82,8 +104,7 @@ function createSensorTable() {
 
 function addSensorToTable(sensor) {
     sensors[sensor.id] = sensor;
-    $("#sensor-table tbody").append("<tr><td>" + getDescriptionForType(sensor.type) +
-            "</td><td><a href='/graph.html?sensor=" + sensor.id + "' target='_blank'>" + sensor.name + "</a>"
+    $("#sensor-table tbody").append("<tr><td>" + getDescriptionForType(sensor.type) + "</td><td>" + sensor.name
             + "</td><td><span id='sensor-" + sensor.id + "-value'></span> " + getUnitForType(sensor.type)
             + "</td><td><span id='sensor-" + sensor.id + "-timestamp'></span>"
             + "</td><td><canvas id='sensor-" + sensor.id + "-graph' class='sensor-graph' height='70' width='250'></canvas>"
@@ -93,12 +114,8 @@ function addSensorToTable(sensor) {
     sensors[sensor.id].chart = new Chart(ctx, {
         type: 'scatter',
         options: {
-            legend: {
-                display: false
-            },
-            animation: {
-                duration: 0
-            },
+            legend: {display: false},
+            animation: {duration: 0},
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, data) {
@@ -107,11 +124,7 @@ function addSensorToTable(sensor) {
                     }
                 }
             },
-            scales: {
-                xAxes: [{
-                        display: false
-                    }]
-            }
+            scales: {xAxes: [{display: false}]}
         },
         data: {
             datasets: [{
@@ -141,18 +154,14 @@ function refreshDistance() {
 
 function createBigGraph() {
     var canvas = document.getElementById("graph");
-    canvas.width = window.innerWidth - 10;
-    canvas.height = window.innerHeight - 50;
+    canvas.width = window.innerWidth - 15;
+    canvas.height = window.innerHeight - 100;
     var ctx = canvas.getContext('2d');
     graph = new Chart(ctx, {
         type: 'scatter',
         options: {
-            legend: {
-                display: true
-            },
-            animation: {
-                duration: 0
-            },
+            legend: {display: true},
+            animation: {duration: 0},
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, data) {
@@ -164,20 +173,16 @@ function createBigGraph() {
             scales: {
                 xAxes: [{
                         type: "time",
-                        time: {
-                            unit: 'minute'
-                        }
+                        time: {unit: 'minute'}
                     }]
             }
         },
-        data: {
-            datasets: []
-        }
+        data: {datasets: []}
     });
 }
 
 function toggleBigGraphData(sensorId, checked) {
-    var date = dateToString(new Date());
+    var date = dateToString(document.getElementById("date").valueAsDate);
     if (checked) {
         $.get("/sensor/history?from=" + date + "&to=" + date + "&sensorId=" + sensorId, function (data) {
             var elements = data.map(x => {
@@ -209,4 +214,10 @@ function loadSensorsToCheckboxes() {
             sensors[sensor.id] = sensor;
         });
     });
+}
+
+function graphDateChanged() {
+    $("#checkboxes input").prop("checked", false);
+    graph.data.datasets = [];
+    graph.update();
 }

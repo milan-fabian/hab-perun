@@ -43,8 +43,8 @@ public class PayloadRestController {
     @PostMapping("/payload/status")
     public void postStatus(@RequestBody PayloadStatus payloadStatus) {
         LOG.debug("Received payload status");
-        LocalDateTime dateTime = Instant.ofEpochMilli(payloadStatus.getTimestamp()).atZone(ZoneId.systemDefault()).toLocalDateTime();
         for (PayloadStatus.SensorStatus sensorStatus : payloadStatus.getSensors()) {
+            LocalDateTime dateTime = Instant.ofEpochMilli(sensorStatus.getTimestamp()).atZone(ZoneId.systemDefault()).toLocalDateTime();
             Sensor sensor = sensorRepository.findByNameAndType(sensorStatus.getName(), sensorStatus.getType());
             if (sensor == null) {
                 sensor = new Sensor();
