@@ -4,16 +4,7 @@ import java.util.List;
 
 public class PayloadStatus {
 
-    private long timestamp;
     private List<SensorStatus> sensors;
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
 
     public List<SensorStatus> getSensors() {
         return sensors;
@@ -28,11 +19,13 @@ public class PayloadStatus {
         private SensorType type;
         private String name;
         private float value;
+        private long timestamp;
 
         public SensorStatus() {
         }
 
-        public SensorStatus(SensorType type, String name, float value) {
+        public SensorStatus(long timestamp, SensorType type, String name, float value) {
+            this.timestamp = timestamp;
             this.type = type;
             this.name = name;
             this.value = value;
@@ -62,5 +55,12 @@ public class PayloadStatus {
             this.value = value;
         }
 
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(long timestamp) {
+            this.timestamp = timestamp;
+        }
     }
 }

@@ -10,6 +10,6 @@ public enum SensorType {
     MAG_X, MAG_Y, MAG_Z,
     ACC_X, ACC_Y, ACC_Z,
     BAT_LVL, BAT_TEMP, 
-    ALT, LONG, LAT, SPEED, BEAR,
+    ALT, LONG, LAT, SPEED, BEAR, POS_ACCURACY,
     PHONE_SIGNAL;
 }
