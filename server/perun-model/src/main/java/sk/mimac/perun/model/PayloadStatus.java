@@ -18,17 +18,17 @@ public class PayloadStatus {
 
         private SensorType type;
         private String name;
-        private float value;
-        private long timestamp;
+        private float val;
+        private long time;
 
         public SensorStatus() {
         }
 
-        public SensorStatus(long timestamp, SensorType type, String name, float value) {
-            this.timestamp = timestamp;
+        public SensorStatus(long time, SensorType type, String name, float val) {
+            this.time = time;
             this.type = type;
             this.name = name;
-            this.value = value;
+            this.val = val;
         }
 
         public SensorType getType() {
@@ -47,20 +47,20 @@ public class PayloadStatus {
             this.name = name;
         }
 
-        public float getValue() {
-            return value;
+        public float getVal() {
+            return val;
         }
 
-        public void setValue(float value) {
-            this.value = value;
+        public void setVal(float val) {
+            this.val = val;
         }
 
-        public long getTimestamp() {
-            return timestamp;
+        public long getTime() {
+            return time;
         }
 
-        public void setTimestamp(long timestamp) {
-            this.timestamp = timestamp;
+        public void setTime(long time) {
+            this.time = time;
         }
     }
 }

@@ -83,8 +83,8 @@ public class FetchDataTimerTask extends TimerTask {
 
         PayloadStatus status = new PayloadStatus();
         status.setSensors(new ArrayList<>());
-        status.getSensors().add(new PayloadStatus.SensorStatus(batteryTimestamp, SensorType.BAT_LVL, "phone_bat", batteryLevel));
-        status.getSensors().add(new PayloadStatus.SensorStatus(System.currentTimeMillis(), SensorType.BAT_TEMP, "phone_bat", getBatteryTemperature()));
+        status.getSensors().add(new PayloadStatus.SensorStatus(batteryTimestamp, SensorType.BAT_LVL, "gn4_bat", batteryLevel));
+        status.getSensors().add(new PayloadStatus.SensorStatus(System.currentTimeMillis(), SensorType.TEMP, "gn4_bat", getBatteryTemperature()));
         addLocationData(status.getSensors());
         addSignalStrengthData(status.getSensors());
         status.getSensors().addAll(sensorListener.getStatuses());
@@ -116,7 +116,7 @@ public class FetchDataTimerTask extends TimerTask {
     private void addSignalStrengthData(List<PayloadStatus.SensorStatus> sensors) {
         Integer signalStrength = phoneSignalListener.getLastStrength();
         if (signalStrength != null) {
-            sensors.add(new PayloadStatus.SensorStatus(System.currentTimeMillis(), SensorType.PHONE_SIGNAL, "phone_gsm", signalStrength));
+            sensors.add(new PayloadStatus.SensorStatus(System.currentTimeMillis(), SensorType.PHN_SGNL, "gn4_gsm", signalStrength));
         }
     }
 
@@ -124,12 +124,12 @@ public class FetchDataTimerTask extends TimerTask {
         Location location = locationListener.getLastLocation();
         if (location != null && (System.currentTimeMillis() - location.getTime() < 20_000)) {
             long timestamp = location.getTime();
-            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.LAT, "phone_gps", (float) location.getLatitude()));
-            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.LONG, "phone_gps", (float) location.getLongitude()));
-            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ALT, "phone_gps", (float) location.getAltitude()));
-            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.SPEED, "phone_gps", location.getSpeed()));
-            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.BEAR, "phone_gps", location.getBearing()));
-            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.POS_ACCURACY, "phone_gps", location.getAccuracy()));
+            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.LAT, "gn4_gps", (float) location.getLatitude()));
+            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.LNG, "gn4_gps", (float) location.getLongitude()));
+            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ALT, "gn4_gps", (float) location.getAltitude()));
+            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.SPD, "gn4_gps", location.getSpeed()));
+            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.BEAR, "gn4_gps", location.getBearing()));
+            sensors.add(new PayloadStatus.SensorStatus(timestamp, SensorType.POS_ACUR, "gn4_gps", location.getAccuracy()));
         }
     }
 }

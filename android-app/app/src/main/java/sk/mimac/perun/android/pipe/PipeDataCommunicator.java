@@ -93,7 +93,7 @@ public class PipeDataCommunicator implements Runnable {
             result.add(new PayloadStatus.SensorStatus(timestamp, SensorType.LAT, "ublox", Float.parseFloat(parts[3])));
         }
         if (!parts[4].equals("0.00000")) {
-            result.add(new PayloadStatus.SensorStatus(timestamp, SensorType.LONG, "ublox", Float.parseFloat(parts[4])));
+            result.add(new PayloadStatus.SensorStatus(timestamp, SensorType.LNG, "ublox", Float.parseFloat(parts[4])));
         }
         if (!parts[5].equals("00000")) {
             result.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ALT, "ublox", Float.parseFloat(parts[5])));
@@ -111,16 +111,16 @@ public class PipeDataCommunicator implements Runnable {
         Float alt = null;
 
         for (PayloadStatus.SensorStatus sensorStatus : tempLastStatuses) {
-            if (sensorStatus.getName().equals("phone_pressure") && sensorStatus.getType() == SensorType.PRESSURE) {
-                pressure = sensorStatus.getValue();
-            } else if (sensorStatus.getName().equals("phone_bat") && sensorStatus.getType() == SensorType.BAT_LVL) {
-                batteryLevel = sensorStatus.getValue();
-            } else if (sensorStatus.getName().equals("phone_gps") && sensorStatus.getType() == SensorType.LAT) {
-                lat = sensorStatus.getValue();
-            } else if (sensorStatus.getName().equals("phone_gps") && sensorStatus.getType() == SensorType.LONG) {
-                lon = sensorStatus.getValue();
-            } else if (sensorStatus.getName().equals("phone_gps") && sensorStatus.getType() == SensorType.ALT) {
-                alt = sensorStatus.getValue();
+            if (sensorStatus.getName().equals("gn4_pressure") && sensorStatus.getType() == SensorType.PRES) {
+                pressure = sensorStatus.getVal();
+            } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.BAT_LVL) {
+                batteryLevel = sensorStatus.getVal();
+            } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.LAT) {
+                lat = sensorStatus.getVal();
+            } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.LNG) {
+                lon = sensorStatus.getVal();
+            } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.ALT) {
+                alt = sensorStatus.getVal();
             }
         }
         StringBuilder builder = new StringBuilder();

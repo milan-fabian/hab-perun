@@ -6,10 +6,11 @@ package sk.mimac.perun.model;
  */
 public enum SensorType {
 
-    PRESSURE, 
+    PRES, 
     MAG_X, MAG_Y, MAG_Z,
     ACC_X, ACC_Y, ACC_Z,
-    BAT_LVL, BAT_TEMP, 
-    ALT, LONG, LAT, SPEED, BEAR, POS_ACCURACY,
-    PHONE_SIGNAL;
+    BAT_LVL, 
+    TEMP, 
+    ALT, LNG, LAT, SPD, BEAR, POS_ACUR,
+    PHN_SGNL;
 }

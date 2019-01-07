@@ -25,18 +25,18 @@ function loadLastDataSensors() {
     $.get("/data/last", function (data) {
         var lat, long, alt;
         data.forEach(function (element) {
-            $("#sensor-" + element.sensorId + "-value").html(+element.value.toFixed(3));
-            $("#sensor-" + element.sensorId + "-timestamp").html(formatDateTime(element.timestamp));
+            $("#sensor-" + element.sensorId + "-value").html(+element.val.toFixed(3));
+            $("#sensor-" + element.sensorId + "-timestamp").html(formatDateTime(element.time));
             if (sensors[element.sensorId].name === "phone_gps") {
                 switch (sensors[element.sensorId].type) {
                     case "LAT":
-                        lat = element.value;
+                        lat = element.val;
                         break;
                     case "LONG":
-                        long = element.value;
+                        long = element.val;
                         break;
                     case "ALT":
-                        alt = element.value;
+                        alt = element.val;
                         break;
                 }
             }
@@ -47,7 +47,7 @@ function loadLastDataSensors() {
             if (data.length === 0 || data[data.length - 1].x !== date) {
                 data.push({
                     x: date,
-                    y: element.value
+                    y: element.val
                 });
 
                 if (data.length > 25) {

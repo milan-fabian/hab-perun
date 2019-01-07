@@ -30,17 +30,17 @@ public class SensorListener implements SensorEventListener {
         long timestamp = System.currentTimeMillis();
         switch (event.sensor.getType()) {
             case Sensor.TYPE_PRESSURE:
-                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.PRESSURE, "phone_pressure", event.values[0]));
+                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.PRES, "gn4_pressure", event.values[0]));
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD:
-                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.MAG_X, "phone_mag", event.values[0]));
-                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.MAG_Y, "phone_mag", event.values[1]));
-                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.MAG_Z, "phone_mag", event.values[2]));
+                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.MAG_X, "gn4_mag", event.values[0]));
+                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.MAG_Y, "gn4_mag", event.values[1]));
+                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.MAG_Z, "gn4_mag", event.values[2]));
                 break;
             case Sensor.TYPE_ACCELEROMETER:
-                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ACC_X, "phone_acc", event.values[0]));
-                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ACC_Y, "phone_acc", event.values[1]));
-                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ACC_Z, "phone_acc", event.values[2]));
+                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ACC_X, "gn4_acc", event.values[0]));
+                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ACC_Y, "gn4_acc", event.values[1]));
+                statuses.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ACC_Z, "gn4_acc", event.values[2]));
                 break;
         }
         sensorManager.unregisterListener(this, event.sensor);

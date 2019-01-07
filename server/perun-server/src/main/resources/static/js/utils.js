@@ -1,13 +1,13 @@
 function getUnitForType(type) {
     switch (type) {
         case "ALT":
-        case "POS_ACCURACY":
+        case "POS_ACUR":
             return "m";
-        case "LONG":
+        case "LNG":
         case "LAT":
         case "BEAR":
             return "°";
-        case "PRESSURE":
+        case "PRES":
             return "hPa";
         case "MAG_X":
         case "MAG_Y":
@@ -18,9 +18,9 @@ function getUnitForType(type) {
         case "ACC_Z":
             return "m/s²";
         case "BAT_LVL":
-        case "PHONE_SIGNAL":
+        case "PHN_SGNL":
             return "%";
-        case "BAT_TEMP":
+        case "TEMP":
             return "°C";
         case "SPEED":
             return "m/s";
@@ -33,13 +33,13 @@ function getDescriptionForType(type) {
     switch (type) {
         case "ALT":
             return "Altitude";
-        case "LONG":
+        case "LNG":
             return "Longitude";
         case "LAT":
             return "Latitude";
         case "BEAR":
             return "Bearing";
-        case "PRESSURE":
+        case "PRES":
             return "Atmospheric pressure";
         case "MAG_X":
             return "Magnetic field X";
@@ -55,13 +55,13 @@ function getDescriptionForType(type) {
             return "Acceleration Z";
         case "BAT_LVL":
             return "Battery level";
-        case "BAT_TEMP":
-            return "Battery temperature";
-        case "SPEED":
+        case "TEMP":
+            return "Temperature";
+        case "SPD":
             return "Speed";
-        case "PHONE_SIGNAL":
+        case "PHN_SGNL":
             return "Phone signal";
-        case "POS_ACCURACY":
+        case "POS_ACUR":
             return "Position accuracy";
         default:
             return type;
