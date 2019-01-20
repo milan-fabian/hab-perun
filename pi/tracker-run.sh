@@ -28,6 +28,7 @@ setupDevice() {
 }
 
 mainLoop() {
+	echo "" > $ANDROID_TELEMETRY
 	echo ">> Starting communication with via ADB"
 	checkAdb
 	echo ">> ADB connected"
@@ -48,8 +49,8 @@ mainLoop() {
 		echo >> $ANDROID_TELEMETRY
 
 		# Send image every 15s * 8 = 2 minutes 
-		if (( $number % 8 == 0 )); then
-			# TODO
+		if (( $counter % 8 == 0 )); then
+			cat $(ls -t images/RTTY/*.JPG | head -n1) | nc -w 2 localhost 9901
 		fi
 		
 		((counter++))

@@ -43,7 +43,7 @@ public class CameraUtils {
                             stream.write(data);
                         }
                         if(!highres) {
-                            new Thread(() -> ServiceConnector.sendImage("phone", data)).start();
+                            new Thread(() -> ServiceConnector.sendImage("gn4", data)).start();
                         }
                     } catch (Exception ex) {
                         Log.w(TAG, "Can't get image from camera", ex);

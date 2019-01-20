@@ -27,7 +27,7 @@ public class PipeDataCommunicator implements Runnable {
 
     private boolean shouldRun = true;
     private List<PayloadStatus.SensorStatus> receivedStatuses;
-    private List<PayloadStatus.SensorStatus> sendStatuses;
+    private List<PayloadStatus.SensorStatus> sendStatuses = Collections.emptyList();;
     private ServerSocket serverSocket;
 
     public PipeDataCommunicator(int pipePort) {
@@ -98,11 +98,15 @@ public class PipeDataCommunicator implements Runnable {
         if (!parts[5].equals("00000")) {
             result.add(new PayloadStatus.SensorStatus(timestamp, SensorType.ALT, "ublox", Float.parseFloat(parts[5])));
         }
+        if (!parts[9].equals("0")) {
+            result.add(new PayloadStatus.SensorStatus(timestamp, SensorType.TEMP, "rpi", Float.parseFloat(parts[9])));
+        }
         return result;
     }
 
     private String prepareLine() {
         List<PayloadStatus.SensorStatus> tempLastStatuses = sendStatuses;
+        sendStatuses = Collections.emptyList();
 
         Float pressure = null;
         Float batteryLevel = null;
@@ -115,11 +119,11 @@ public class PipeDataCommunicator implements Runnable {
                 pressure = sensorStatus.getVal();
             } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.BAT_LVL) {
                 batteryLevel = sensorStatus.getVal();
-            } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.LAT) {
+            } else if (sensorStatus.getName().equals("gn4_gps") && sensorStatus.getType() == SensorType.LAT) {
                 lat = sensorStatus.getVal();
-            } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.LNG) {
+            } else if (sensorStatus.getName().equals("gn4_gps") && sensorStatus.getType() == SensorType.LNG) {
                 lon = sensorStatus.getVal();
-            } else if (sensorStatus.getName().equals("gn4_bat") && sensorStatus.getType() == SensorType.ALT) {
+            } else if (sensorStatus.getName().equals("gn4_gps") && sensorStatus.getType() == SensorType.ALT) {
                 alt = sensorStatus.getVal();
             }
         }

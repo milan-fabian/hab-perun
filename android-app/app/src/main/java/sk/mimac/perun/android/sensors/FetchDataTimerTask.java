@@ -76,7 +76,7 @@ public class FetchDataTimerTask extends TimerTask {
         new Thread(() -> CameraUtils.getPicture(counter % 2 == 1)).start();
 
         try {
-            Thread.sleep(550);
+            Thread.sleep(600);
         } catch (InterruptedException ignore) {
         }
         sensorManager.unregisterListener(sensorListener);
