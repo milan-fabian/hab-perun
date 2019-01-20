@@ -53,9 +53,9 @@ public class PayloadRestController {
                 sensor = sensorRepository.save(sensor);
             }
             SensorData entity = new SensorData();
-            entity.setSensorId(sensor.getId());
-            entity.setValue(sensorStatus.getVal());
-            entity.setTimestamp(dateTime);
+            entity.setSensor(sensor.getId());
+            entity.setVal(sensorStatus.getVal());
+            entity.setTime(dateTime);
             sensorDataRepository.save(entity);
         }
     }
@@ -64,7 +64,7 @@ public class PayloadRestController {
     public void postImage(@RequestParam String camera, @RequestBody byte[] data) {
         LOG.debug("Received image");
         try {
-            Files.write(Paths.get(imageStorePath, camera + "-" + DATE_TIME_FORMAT.format(LocalDateTime.now()) + ".jpg"), data);
+            Files.write(Paths.get(imageStorePath, camera + "_" + DATE_TIME_FORMAT.format(LocalDateTime.now()) + ".jpg"), data);
         } catch (IOException ex) {
             LOG.warn("Can't save image", ex);
         }

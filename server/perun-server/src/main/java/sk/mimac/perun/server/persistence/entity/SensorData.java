@@ -22,13 +22,13 @@ public class SensorData implements Serializable {
     private Long id;
 
     @Column(name = "timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    private LocalDateTime time;
 
     @Column(name = "sensor_id", nullable = false)
-    private long sensorId;
+    private long sensor;
 
     @Column(name = "value", nullable = false)
-    private float value;
+    private float val;
 
     public Long getId() {
         return id;
@@ -38,28 +38,28 @@ public class SensorData implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
-    public long getSensorId() {
-        return sensorId;
+    public float getVal() {
+        return val;
     }
 
-    public void setSensorId(long sensorId) {
-        this.sensorId = sensorId;
+    public void setVal(float val) {
+        this.val = val;
     }
 
-    public float getValue() {
-        return value;
+    public long getSensor() {
+        return sensor;
     }
 
-    public void setValue(float value) {
-        this.value = value;
+    public void setSensor(long sensor) {
+        this.sensor = sensor;
     }
 
 }

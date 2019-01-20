@@ -25,14 +25,14 @@ function loadLastDataSensors() {
     $.get("/data/last", function (data) {
         var lat, long, alt;
         data.forEach(function (element) {
-            $("#sensor-" + element.sensorId + "-value").html(+element.val.toFixed(3));
-            $("#sensor-" + element.sensorId + "-timestamp").html(formatDateTime(element.time));
-            if (sensors[element.sensorId].name === "phone_gps") {
-                switch (sensors[element.sensorId].type) {
+            $("#sensor-" + element.sensor + "-value").html(+element.val.toFixed(3));
+            $("#sensor-" + element.sensor + "-timestamp").html(formatDateTime(element.time));
+            if (sensors[element.sensor].name === "gn4_gps") {
+                switch (sensors[element.sensor].type) {
                     case "LAT":
                         lat = element.val;
                         break;
-                    case "LONG":
+                    case "LNG":
                         long = element.val;
                         break;
                     case "ALT":
@@ -41,9 +41,9 @@ function loadLastDataSensors() {
                 }
             }
 
-            var chart = sensors[element.sensorId].chart;
+            var chart = sensors[element.sensor].chart;
             var data = chart.data.datasets[0].data;
-            var date = Date.parse(element.timestamp);
+            var date = Date.parse(element.time);
             if (data.length === 0 || data[data.length - 1].x !== date) {
                 data.push({
                     x: date,
@@ -184,9 +184,9 @@ function createBigGraph() {
 function toggleBigGraphData(sensorId, checked) {
     var date = dateToString(document.getElementById("date").valueAsDate);
     if (checked) {
-        $.get("/sensor/history?from=" + date + "&to=" + date + "&sensorId=" + sensorId, function (data) {
+        $.get("/sensor/history?from=" + date + "&to=" + date + "&sensor=" + sensorId, function (data) {
             var elements = data.map(x => {
-                return {x: Date.parse(x.timestamp), y: x.value};
+                return {x: Date.parse(x.time), y: x.val};
             });
             var sensor = sensors[sensorId];
             graph.data.datasets.push({

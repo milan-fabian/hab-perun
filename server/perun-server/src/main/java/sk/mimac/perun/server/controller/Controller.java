@@ -49,14 +49,14 @@ public class Controller {
     }
 
     @GetMapping("/sensor/history")
-    public List<SensorData> getSensorList(@RequestParam long sensorId,
+    public List<SensorData> getSensorHistory(@RequestParam long sensor,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam LocalDate from, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam LocalDate to) {
-        return sensorDataRepository.getHistory(sensorId, from.atStartOfDay(), to.plusDays(1).atStartOfDay());
+        return sensorDataRepository.getHistory(sensor, from.atStartOfDay(), to.plusDays(1).atStartOfDay());
     }
 
     @GetMapping("/sensor")
-    public Sensor getSensorList(@RequestParam long sensorId) {
-        return sensorRepository.getOne(sensorId);
+    public Sensor getSensor(@RequestParam long sensor) {
+        return sensorRepository.getOne(sensor);
     }
 
     @GetMapping(value = "/image/file/{file}", produces = "image/jpeg")
@@ -74,7 +74,7 @@ public class Controller {
         Map<String, File> mostRecentMap = new HashMap<>();
         for (File file : files) {
             String fileName = file.getName();
-            String camera = fileName.substring(0, fileName.indexOf('-'));
+            String camera = fileName.substring(0, fileName.indexOf('_'));
             Integer count = countMap.get(camera);
             if (count == null) {
                 count = 1;
